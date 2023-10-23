@@ -1,0 +1,39 @@
+---
+- name: Check if a package is installed on Red Hat
+  hosts: db_server  # Replace with your target host or group
+  become: yes
+
+  tasks:
+
+    - name: Check if Apache (httpd) is installed
+      command: rpm -q httpd
+      register: apache_status
+      ignore_errors: yes  # Ignore errors if the package is not installed
+      when: ansible_distribution == "RedHat"
+
+    - name: Install Apache (httpd) if not installed
+      yum:
+        name: httpd
+        state: present
+      when: apache_status is failed
+
+    - name: Check if PHP is installed
+      command: rpm -q php
+      register: php_status
+      ignore_errors: yes
+      when: ansible_distribution == "RedHat"
+
+    - name: Install PHP if not installed
+      yum:
+        name: php
+        state: present
+      when: php_status is failed
+
+
+    - name: Display package installation status
+      debug:
+        var: "{{ item }}"
+      with_items:
+        - apache_status
+        - php_status
+      when: ansible_distribution == "RedHat"

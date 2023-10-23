@@ -1,0 +1,33 @@
+---
+- name: Install Platforms for Web Server
+  hosts: db_server
+  become: yes
+
+  tasks:
+    - name: Install Apache && PHP && Update Repository Index (RedHat)
+      yum:
+        name:
+          - httpd
+          - php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "RedHat"
+
+    - name: Start and enable Apache services on RedHat
+      become: yes
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "RedHat"
+
+
+    - name: Install Apache2 && PHP && Update Repository Index (Ubuntu)
+      apt:
+        name:
+          - apache2
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+

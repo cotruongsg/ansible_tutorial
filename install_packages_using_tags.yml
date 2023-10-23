@@ -1,0 +1,33 @@
+---
+- name: Ubuntu
+  hosts: web_server
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: Install Apache2 and LibApache2 packages for Ubuntu
+      tags:
+        - Ubuntu_pkgs
+      apt:
+        name:
+          - apache2
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
+
+
+- name: RedHat
+  hosts: db_server
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: Install Apache (httpd) and PHP packages for RedHat
+      tags:
+        - RedHat_pkgs
+      yum:
+        name:
+          - httpd
+          - php
+        state: latest
+        update_cache: yes

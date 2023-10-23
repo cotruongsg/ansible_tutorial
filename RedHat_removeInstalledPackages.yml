@@ -1,0 +1,11 @@
+---
+- name: Remove Apache (httpd) using rpm
+  hosts: db_server
+  tasks:
+    - name: Remove Apache (httpd) using rpm
+      ansible.builtin.command: rpm -e httpd
+      become: yes
+
+    - name: Remove PHP using rpm
+      command: rpm -e php
+      become: yes

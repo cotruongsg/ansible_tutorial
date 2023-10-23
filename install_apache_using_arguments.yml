@@ -1,0 +1,16 @@
+---
+- name: Install Apache
+  hosts: automation
+  become: yes
+
+  tasks:
+
+    - name: Install Apache2 and Php
+      apt:
+        name:
+          - "{{ php_package }}"
+          - "{{ php_package }}"
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
