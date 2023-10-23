@@ -1,0 +1,56 @@
+---
+- name: Ubuntu
+  hosts: web_server
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: Install Apache2 and LibApache2 packages for Ubuntu
+      tags:
+        - Ubuntu_pkgs
+      apt:
+        name:
+          - apache2
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
+
+    - name: Copy default html file for site
+      tags:
+        - Ubuntu_pkgs
+      copy:
+        src: files/default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+
+
+- name: RedHat
+  hosts: db_server
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: Install Apache (httpd) and PHP packages for RedHat
+      tags:
+        - RedHat_pkgs
+      yum:
+        name:
+          - httpd
+          - php
+        state: latest
+        update_cache: yes
+
+
+    - name: Copy default html file for site
+      tags:
+        - RedHat_pkgs
+      copy:
+        src: files/default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+
+
